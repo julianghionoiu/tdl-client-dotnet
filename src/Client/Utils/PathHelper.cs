@@ -4,35 +4,31 @@ namespace TDL.Client.Utils
 {
     public static class PathHelper
     {
+        private const string SolutionFileName = "tdl.sln";
+
         public static string RepositoryPath { get; }
 
         static PathHelper()
         {
-            var exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            var srcPath = FindParent(exePath, "bin");
-
-            //TODO: Find a path in a more reliable way.
-            RepositoryPath = new DirectoryInfo(srcPath).Parent.Parent.Parent.FullName;
+            var exeDirectoryPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            RepositoryPath = GetRepositoryPath(exeDirectoryPath) ?? exeDirectoryPath;
         }
 
-        private static string FindParent(string path, string parentName)
+        private static string GetRepositoryPath(string path)
         {
-            while (true)
+            var currentDirectory = new DirectoryInfo(path);
+            do
             {
-                var directory = new DirectoryInfo(path);
-
-                if (directory.Parent == null)
+                if (File.Exists(Path.Combine(currentDirectory.FullName, SolutionFileName)))
                 {
-                    return null;
+                    return currentDirectory.FullName;
                 }
 
-                if (directory.Parent.Name == parentName)
-                {
-                    return directory.Parent.FullName;
-                }
-
-                path = directory.Parent.FullName;
+                currentDirectory = currentDirectory.Parent;
             }
+            while (currentDirectory != null);
+
+            return null;
         }
     }
 }
