@@ -31,13 +31,8 @@ build:
   publish_nuget_symbols: true
   verbosity: minimal
 
-before_test:
-- ps: >-
-    python wiremock/fetch-wiremock-and-run.py start 41375
-    
-    python wiremock/fetch-wiremock-and-run.py start 8222
-
-    python broker/activemq-wrapper.py start
+test_script:
+- run-tests.cmd	
 
 deploy:
 - provider: NuGet
