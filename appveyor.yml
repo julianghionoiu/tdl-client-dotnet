@@ -31,11 +31,8 @@ build:
   publish_nuget_symbols: true
   verbosity: minimal
 
-before_test:
-- ps: >-
-    cd broker
-
-    .\activemq-wrapper.ps1
+test_script:
+- run-tests.cmd	
 
 deploy:
 - provider: NuGet
