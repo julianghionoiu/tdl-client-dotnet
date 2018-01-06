@@ -98,6 +98,7 @@
     <Compile Include="Runner\RoundManagement.cs" />
     <Compile Include="Runner\RunnerAction.cs" />
     <Compile Include="Runner\ServerErrorException.cs" />
+    <Compile Include="Runner\WindowsConsoleSupport.cs" />
     <Compile Include="Utils\Maybe.cs" />
     <Compile Include="Utils\PathHelper.cs" />
   </ItemGroup>

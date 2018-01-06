@@ -46,6 +46,9 @@ namespace TDL.Client.Runner
                 auditStream.WriteLine("Please run `record_screen_and_upload` before continuing.");
                 return;
             }
+
+            WindowsConsoleSupport.EnableColours();
+
             auditStream.WriteLine("Connecting to " + config.Hostname);
             RunApp();
         }
