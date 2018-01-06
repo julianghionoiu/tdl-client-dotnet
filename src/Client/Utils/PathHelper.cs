@@ -4,7 +4,7 @@ namespace TDL.Client.Utils
 {
     public static class PathHelper
     {
-        private const string SolutionFileName = "tdl.sln";
+        private const string SolutionFileSearchPattern = "*.sln";
 
         public static string RepositoryPath { get; }
 
@@ -19,7 +19,7 @@ namespace TDL.Client.Utils
             var currentDirectory = new DirectoryInfo(path);
             do
             {
-                if (File.Exists(Path.Combine(currentDirectory.FullName, SolutionFileName)))
+                if (currentDirectory.GetFiles(SolutionFileSearchPattern).Length == 1)
                 {
                     return currentDirectory.FullName;
                 }
