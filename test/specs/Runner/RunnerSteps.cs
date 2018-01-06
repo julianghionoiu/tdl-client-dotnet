@@ -25,7 +25,7 @@ namespace TDL.Test.Specs.Runner
         private IImplementationRunner implementationRunner = new QuietImplementationRunner();
         private string implementationRunnerMessage;
         private string journeyId;
-        private Func<string> actionProviderCallback = () => null;
+        private TestActionProvider actionProviderCallback = new TestActionProvider();
 
         [Given(@"There is a challenge server running on ""(.*)"" port (.*)")]
         public void GivenThereIsAChallengeServerRunningOnPort(string hostname, int port)
@@ -69,7 +69,7 @@ namespace TDL.Test.Specs.Runner
         [Given(@"the action input comes from a provider returning ""(.*)""")]
         public void GivenTheActionInputComesFromAProviderReturning(string s)
         {
-            actionProviderCallback = () => s;
+            actionProviderCallback.Set(s);
         }
 
         [Given(@"the challenges folder is empty")]
