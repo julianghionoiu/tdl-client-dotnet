@@ -14,6 +14,7 @@ namespace TDL.Client.Queue
         {
             Port = 61616;
             RequestTimeoutMilliseconds = 500;
+            AuditStream = new ConsoleAuditStream();
         }
 
         public ImplementationRunnerConfig SetHostname(string hostname)
