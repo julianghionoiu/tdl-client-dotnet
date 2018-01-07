@@ -9,7 +9,7 @@ namespace TDL.Client.Runner
         private IImplementationRunner implementationRunner;
         private RecordingSystem recordingSystem;
         private ChallengeServerClient challengeServerClient;
-        private Func<string> userInputCallback;
+        private IActionProvider userInputCallback;
 
         public static ChallengeSession ForRunner(IImplementationRunner implementationRunner)
         {
@@ -27,7 +27,7 @@ namespace TDL.Client.Runner
             return this;
         }
 
-        public ChallengeSession WithActionProvider(Func<string> callback)
+        public ChallengeSession WithActionProvider(IActionProvider callback)
         {
             userInputCallback = callback;
             return this;
@@ -46,6 +46,9 @@ namespace TDL.Client.Runner
                 auditStream.WriteLine("Please run `record_screen_and_upload` before continuing.");
                 return;
             }
+
+            WindowsConsoleSupport.EnableColours();
+
             auditStream.WriteLine("Connecting to " + config.Hostname);
             RunApp();
         }
@@ -60,7 +63,7 @@ namespace TDL.Client.Runner
                 bool shouldContinue = CheckStatusOfChallenge();
                 if (shouldContinue)
                 {
-                    var userInput = userInputCallback();
+                    var userInput = userInputCallback.Get();
                     auditStream.WriteLine("Selected action is: " + userInput);
                     var roundDescription = ExecuteUserAction(userInput);
                     RoundManagement.SaveDescription(recordingSystem, roundDescription, auditStream);

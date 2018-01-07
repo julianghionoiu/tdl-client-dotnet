@@ -6,7 +6,7 @@ using TDL.Client.Utils;
 
 namespace TDL.Client
 {
-    public partial class QueueBasedImplementationRunner
+    public partial class QueueBasedImplementationRunner : IImplementationRunner
     {
         private readonly Audit audit;
         private readonly ProcessingRules deployProcessingRules;

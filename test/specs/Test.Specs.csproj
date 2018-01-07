@@ -57,6 +57,7 @@
     <Compile Include="Runner\IEventNotifier.cs" />
     <Compile Include="Runner\RunnerSteps.cs" />
     <Compile Include="Runner\ServerConfig.cs" />
+    <Compile Include="Runner\TestActionProvider.cs" />
     <Compile Include="Runner\WiremockMapping.cs" />
     <Compile Include="Runner\WiremockProcess.cs" />
     <Compile Include="SingletonTestBroker.cs" />
