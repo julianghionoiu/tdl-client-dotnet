@@ -27,7 +27,7 @@ namespace TDL.Test.Specs.Runner
             restClient.Execute(request);
         }
 
-        public bool VerifyEndpointWasHit(string endpoint, string methodType, string body)
+        public bool EndpointWasHit(string endpoint, string methodType, string body)
         {
             return CountRequestsWithEndpoint(endpoint, methodType, body) == 1;
         }

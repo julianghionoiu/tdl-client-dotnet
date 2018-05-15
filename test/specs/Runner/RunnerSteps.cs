@@ -159,7 +159,7 @@ namespace TDL.Test.Specs.Runner
         [Then(@"the recording system should be notified with ""(.*)""")]
         public void ThenTheRecordingSystemShouldBeNotifiedWith(string expectedOutput)
         {
-            recordingServerStub.VerifyEndpointWasHit("/notify", "POST", expectedOutput);
+            Assert.IsTrue(recordingServerStub.EndpointWasHit("/notify", "POST", expectedOutput));
         }
 
         [Then(@"the implementation runner should be run with the provided implementations")]
