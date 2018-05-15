@@ -48,11 +48,7 @@ namespace TDL.Client.Runner
             auditStream.WriteLine($"Challenge description saved to file: {relativePath}.");
 
             // Save round label.
-            using (Stream fileStream = File.Open(LastFetchedRoundPath, FileMode.Create)) {
-                var content = Encoding.ASCII.GetBytes(label);
-                fileStream.Write(content, 0, content.Length);
-                fileStream.Flush();
-            }
+            File.WriteAllText(LastFetchedRoundPath, label);
 
             return "OK";
         }

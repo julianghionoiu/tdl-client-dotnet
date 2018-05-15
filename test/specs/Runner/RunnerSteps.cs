@@ -83,6 +83,13 @@ namespace TDL.Test.Specs.Runner
             }
         }
 
+        [Given(@"the current round is ""(.*)""")]
+        public void GivenTheCurrentRoundIs(string roundId)
+        {
+            var CurrentRoundPath = Path.Combine(PathHelper.RepositoryPath, "challenges", "XR.txt");
+            File.WriteAllText(CurrentRoundPath, roundId);
+        }
+
         [Given(@"there is an implementation runner that prints ""(.*)""")]
         public void GivenThereIsAnImplementationRunnerThatPrints(string s)
         {
