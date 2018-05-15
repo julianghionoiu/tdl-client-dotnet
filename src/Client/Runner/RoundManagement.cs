@@ -28,7 +28,7 @@ namespace TDL.Client.Runner
             var lastFetchedRound = GetLastFetchedRound();
             if (!roundId.Equals(lastFetchedRound))
             {
-                listener.OnNewRound(roundId, RunnerAction.GetNewRoundDescription.ShortName);
+                listener.OnNewRound(roundId);
             }
             SaveDescription(roundId, rawDescription, auditStream);
         }

@@ -5,6 +5,14 @@ using TDL.Client.Runner.Exceptions;
 
 namespace TDL.Client.Runner
 {
+    public class RecordingEvent 
+    {
+        public static readonly String ROUND_START = "new";
+        public static readonly String ROUND_SOLUTION_DEPLOY = "deploy";
+        public static readonly String ROUND_COMPLETED = "done";
+    }
+
+
     public class RecordingSystem : IRoundChangesListener
     {
         private const string RecordingSystemEndpoint = "http://localhost:41375";
@@ -40,9 +48,9 @@ namespace TDL.Client.Runner
             }
         }
 
-        private void NotifyEvent(string lastFetchedRound, string actionName)
+        public void NotifyEvent(string lastFetchedRound, string eventName)
         {
-            Console.WriteLine($@"Notify round ""{lastFetchedRound}"", event ""{actionName}""");
+            Console.WriteLine($@"Notify round ""{lastFetchedRound}"", event ""{eventName}""");
 
             if (!recordingRequired)
             {
@@ -52,7 +60,7 @@ namespace TDL.Client.Runner
             try
             {
                 var request = new RestRequest("notify", Method.POST);
-                request.AddParameter("text/plain", $"{lastFetchedRound}/{actionName}", ParameterType.RequestBody);
+                request.AddParameter("text/plain", $"{lastFetchedRound}/{eventName}", ParameterType.RequestBody);
                 var response = RestClient.Execute(request);
 
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -70,14 +78,9 @@ namespace TDL.Client.Runner
             }
         }
 
-        public void OnNewRound(string roundId, string shortName)
+        public void OnNewRound(string roundId)
         {
-            NotifyEvent(roundId, shortName);
-        }
-
-        public void DeployNotifyEvent(string lastFetchedRound)
-        {
-            NotifyEvent(lastFetchedRound, RunnerAction.DeployToProduction.ShortName);
+            NotifyEvent(roundId, RecordingEvent.ROUND_START);
         }
     }
 }

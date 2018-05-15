@@ -2,6 +2,6 @@
 {
     public interface IRoundChangesListener
     {
-        void OnNewRound(string roundId, string shortName);
+        void OnNewRound(string roundId);
     }
 }

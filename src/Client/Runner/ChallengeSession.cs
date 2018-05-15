@@ -103,7 +103,7 @@ namespace TDL.Client.Runner
             {
                 implementationRunner.Run();
                 var lastFetchedRound = RoundManagement.GetLastFetchedRound();
-                recordingSystem.DeployNotifyEvent(lastFetchedRound);
+                recordingSystem.NotifyEvent(lastFetchedRound, RecordingEvent.ROUND_SOLUTION_DEPLOY);
             }
             return ExecuteAction(userInput);
         }
@@ -112,6 +112,11 @@ namespace TDL.Client.Runner
         {
             var actionFeedback = challengeServerClient.SendAction(userInput);
             config.AuditStream.WriteLine(actionFeedback);
+            if (actionFeedback.Contains("Round time for")) {
+                var lastFetchedRound = RoundManagement.GetLastFetchedRound();
+                recordingSystem.NotifyEvent(lastFetchedRound, RecordingEvent.ROUND_COMPLETED);
+            }
+
             return challengeServerClient.GetRoundDescription();
         }
     }
