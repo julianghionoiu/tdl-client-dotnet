@@ -43,8 +43,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TechTalk.SpecFlow, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SpecFlow.2.2.1\lib\net45\TechTalk.SpecFlow.dll</HintPath>
+    <Reference Include="TechTalk.SpecFlow">
+      <HintPath>..\..\packages\SpecFlow.2.3.2\lib\net45\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -94,7 +94,15 @@
   <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\packages\SpecFlow.2.2.1\tools\TechTalk.SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.2.2.1\tools\TechTalk.SpecFlow.targets')" />
+  <PropertyGroup>
+    <ShowTrace>true</ShowTrace>
+    <OverwriteReadOnlyFiles>true</OverwriteReadOnlyFiles>
+    <VerboseOutput>true</VerboseOutput>
+    <BuildServerMode>true</BuildServerMode>
+    <ForceGeneration>true</ForceGeneration>
+  </PropertyGroup>
+  <Import Project="..\..\packages\SpecFlow.2.3.2\tools\TechTalk.SpecFlow.tasks" Condition="Exists('..\..\packages\SpecFlow.2.3.2\tools\TechTalk.SpecFlow.tasks')" />
+  <Import Project="..\..\packages\SpecFlow.2.3.2\tools\TechTalk.SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.2.3.2\tools\TechTalk.SpecFlow.targets')" />
   <Target Name="AfterUpdateFeatureFilesInProject">
     <!-- Include any files that specflow generated into the compilation of the project. -->
     <ItemGroup>
