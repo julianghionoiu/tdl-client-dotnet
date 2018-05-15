@@ -48,8 +48,7 @@ namespace TDL.Test.Specs.Runner
                     new MatchingDataRequestBodyPattern { EqualTo = body }
                 };
             }
-            request.RequestFormat = DataFormat.Json;
-            request.AddBody(requestData);
+            request.AddJsonBody(requestData);
 
             var response = restClient.Execute<MatchingDataResponse>(request);
             return response.Data.Count;

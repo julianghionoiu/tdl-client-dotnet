@@ -4,6 +4,7 @@ using RestSharp;
 
 namespace TDL.Client.Runner
 {
+
     public class ChallengeServerClient
     {
         private readonly string journeyId;

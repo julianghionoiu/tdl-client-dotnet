@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using TDL.Client.Audit;
+using System;
 
 namespace TDL.Test.Specs.Utils.Logging
 {
@@ -17,6 +18,7 @@ namespace TDL.Test.Specs.Utils.Logging
         public void WriteLine(string value)
         {
             log.AppendLine(value);
+            Console.WriteLine(value);
         }
 
         public override string ToString() => GetLog();
