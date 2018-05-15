@@ -1,8 +1,8 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="test/specs/ClientSteps.cs">
+﻿<Properties StartupConfiguration="{31278A78-1321-40BE-8C99-02ED9FD9E45E}|Unit Tests">
+  <MonoDevelop.Ide.Workbench ActiveDocument="test/specs/Runner/WiremockProcess.cs">
     <Files>
-      <File FileName="test/specs/client/client.feature.cs" Line="4" Column="33" />
-      <File FileName="test/specs/ClientSteps.cs" Line="1" Column="1" />
+      <File FileName="test/specs/Runner/RunnerSteps.cs" Line="179" Column="1" />
+      <File FileName="test/specs/Runner/WiremockProcess.cs" Line="53" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
@@ -12,4 +12,5 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.ItemProperties.demo PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.ItemProperties.test.Test.Specs PreferredExecutionTarget="MonoDevelop.Default" />
 </Properties>
