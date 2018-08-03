@@ -43,12 +43,12 @@ namespace TDL.Client.Runner
             // Save description.
             var descriptionPath = Path.Combine(ChallengesPath, $"{label}.txt");
 
-            File.WriteAllText(descriptionPath, description.Replace("\n", Environment.NewLine));
+            WriteAllTextWithFlush(descriptionPath, description.Replace("\n", Environment.NewLine));
             var relativePath = descriptionPath.Replace(PathHelper.RepositoryPath + Path.DirectorySeparatorChar, "");
             auditStream.WriteLine($"Challenge description saved to file: {relativePath}.");
 
             // Save round label.
-            File.WriteAllText(LastFetchedRoundPath, label);
+            WriteAllTextWithFlush(LastFetchedRoundPath, label);
 
             return "OK";
         }
@@ -57,5 +57,15 @@ namespace TDL.Client.Runner
             File.Exists(LastFetchedRoundPath)
                 ? File.ReadLines(LastFetchedRoundPath, Encoding.Default).FirstOrDefault()
                 : "noRound";
+
+        private static void WriteAllTextWithFlush(string path, string contents)
+        {
+            // get the bytes
+            var data = Encoding.UTF8.GetBytes(contents);
+
+            // write the data to a temp file
+            using (var destFile = File.Create(path, 4096, FileOptions.WriteThrough))
+                destFile.Write(data, 0, data.Length);
+        }
     }
 }
