@@ -70,6 +70,14 @@ namespace TDL.Test.Specs.Runner
         public void GivenTheActionInputComesFromAProviderReturning(string s)
         {
             actionProviderCallback.Set(s);
+
+            // WARNING!! very dirty hack - add the lastChallengeRound to challenges folder
+            // The proper fix is to make this an explicit Spec step and update all the clients
+            var lastRoundPath = Path.Combine(PathHelper.RepositoryPath, "challenges","XR.txt");
+            File.WriteAllText(lastRoundPath, "RoundID" + Environment.NewLine + 
+                              "If you see this and you wonder what the heck??"+
+                              "then you must now that this file is the result of a hack added to "+
+                              "the GivenTheActionInputComesFromAProviderReturning step");
         }
 
         [Given(@"the challenges folder is empty")]
