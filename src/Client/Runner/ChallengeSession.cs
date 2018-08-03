@@ -60,14 +60,43 @@ namespace TDL.Client.Runner
 
             try
             {
-                bool shouldContinue = CheckStatusOfChallenge();
-                if (shouldContinue)
+                var journeyProgress = challengeServerClient.GetJourneyProgress();
+                auditStream.WriteLine(journeyProgress);
+
+                var availableActions = challengeServerClient.GetAvailableActions();
+                auditStream.WriteLine(availableActions);
+
+                bool noActionsAvailable = availableActions.Contains("No actions available.");
+                if (noActionsAvailable)
                 {
-                    var userInput = userInputCallback.Get();
-                    auditStream.WriteLine("Selected action is: " + userInput);
-                    var roundDescription = ExecuteUserAction(userInput);
-                    RoundManagement.SaveDescription(recordingSystem, roundDescription, auditStream);
+                    recordingSystem.TellToStop();
+                    return;
                 }
+
+                var userInput = userInputCallback.Get();
+                auditStream.WriteLine("Selected action is: " + userInput);
+
+                if (userInput.Equals("deploy"))
+                {
+                    implementationRunner.Run();
+                    var lastFetchedRound = RoundManagement.GetLastFetchedRound();
+                    recordingSystem.NotifyEvent(lastFetchedRound, RecordingEvent.ROUND_SOLUTION_DEPLOY);
+                }
+
+                var actionFeedback = challengeServerClient.SendAction(userInput);
+                if (actionFeedback.Contains("Round time for"))
+                {
+                    var lastFetchedRound = RoundManagement.GetLastFetchedRound();
+                    recordingSystem.NotifyEvent(lastFetchedRound, RecordingEvent.ROUND_COMPLETED);
+                }
+                if (actionFeedback.Contains("All challenges have been completed"))
+                {
+                    recordingSystem.TellToStop();
+                }
+
+                config.AuditStream.WriteLine(actionFeedback);
+                var roundDescription = challengeServerClient.GetRoundDescription();
+                RoundManagement.SaveDescription(recordingSystem, roundDescription, auditStream);
             }
             catch (ServerErrorException)
             {
@@ -84,29 +113,7 @@ namespace TDL.Client.Runner
             }
         }
 
-        private bool CheckStatusOfChallenge()
-        {
-            var auditStream = config.AuditStream;
 
-            var journeyProgress = challengeServerClient.GetJourneyProgress();
-            auditStream.WriteLine(journeyProgress);
-
-            var availableActions = challengeServerClient.GetAvailableActions();
-            auditStream.WriteLine(availableActions);
-
-            return !availableActions.Contains("No actions available.");
-        }
-
-        private string ExecuteUserAction(String userInput)
-        {
-            if (userInput.Equals("deploy"))
-            {
-                implementationRunner.Run();
-                var lastFetchedRound = RoundManagement.GetLastFetchedRound();
-                recordingSystem.NotifyEvent(lastFetchedRound, RecordingEvent.ROUND_SOLUTION_DEPLOY);
-            }
-            return ExecuteAction(userInput);
-        }
 
         private string ExecuteAction(String userInput)
         {

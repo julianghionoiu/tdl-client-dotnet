@@ -176,6 +176,12 @@ namespace TDL.Test.Specs.Runner
             Assert.IsTrue(recordingServerStub.EndpointWasHit("/notify", "POST", expectedOutput));
         }
 
+        [Then(@"the recording system should have received a stop signal")]
+        public void ThenTheRecordingSystemShouldReceiveStopSignal()
+        {
+            Assert.IsTrue(recordingServerStub.EndpointWasHit("/stop", "POST", ""));
+        }
+
         [Then(@"the implementation runner should be run with the provided implementations")]
         public void ThenTheImplementationRunnerShouldBeRunWithTheProvidedImplementations()
         {

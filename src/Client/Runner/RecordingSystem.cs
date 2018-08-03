@@ -51,7 +51,17 @@ namespace TDL.Client.Runner
         public void NotifyEvent(string lastFetchedRound, string eventName)
         {
             Console.WriteLine($@"Notify round ""{lastFetchedRound}"", event ""{eventName}""");
+            SendPost("/notify", lastFetchedRound + "/" + eventName);
+        }
 
+        public void TellToStop()
+        {
+            Console.WriteLine("Stopping recording system");
+            SendPost("/stop", "");
+        }
+
+        private void SendPost(string endpoint, string body)
+        {
             if (!recordingRequired)
             {
                 return;
@@ -59,15 +69,15 @@ namespace TDL.Client.Runner
 
             try
             {
-                var request = new RestRequest("notify", Method.POST);
-                request.AddParameter("text/plain", $"{lastFetchedRound}/{eventName}", ParameterType.RequestBody);
+                var request = new RestRequest(endpoint, Method.POST);
+                request.AddParameter("text/plain", body, ParameterType.RequestBody);
                 var response = RestClient.Execute(request);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     Console.WriteLine($"Recording system returned code: {response.StatusCode}");
                 }
-                else if (!response.Content.StartsWith("ACK"))
+                else if (!response.Content.StartsWith("ACK", StringComparison.Ordinal))
                 {
                     Console.WriteLine($"Recording system returned body: {response.Content}");
                 }
