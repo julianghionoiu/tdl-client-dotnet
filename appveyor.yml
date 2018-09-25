@@ -6,7 +6,7 @@ environment:
   projectName: Client
   solutionName: tdl.sln
   api_key:
-    secure: n99aLyTg0+72IVcTor23VDwAXAEsKVPg3kxSod2kI4aVEY7AMtHVy1IJdmX/Zy85
+    secure: 0e+hJeHViUWGnuqcVlD0kv8Rr42XlXPn3wlJ7rEUbLnq2gruFDZONrsVvvSZEcUI
   packageName: TDL.Client
 
 install:
