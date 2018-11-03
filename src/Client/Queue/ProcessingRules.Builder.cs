@@ -1,5 +1,4 @@
 ﻿using System;
-using TDL.Client.Queue.Actions;
 
 namespace TDL.Client.Queue
 {
@@ -24,9 +23,9 @@ namespace TDL.Client.Queue
                 return this;
             }
 
-            public void Then(IClientAction clientAction)
+            public void Build()
             {
-                processingRules.Add(methodName, userImplementation, clientAction);
+                processingRules.Add(methodName, userImplementation);
             }
         }
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TDL.Client.Queue.Abstractions;
 using TDL.Client.Queue.Abstractions.Response;
-using TDL.Client.Queue.Actions;
 
 namespace TDL.Client.Queue
 {
@@ -14,10 +13,9 @@ namespace TDL.Client.Queue
 
         private void Add(
             string methodName,
-            Func<string[], object> userImplementation,
-            IClientAction clientAction)
+            Func<string[], object> userImplementation)
         {
-            rules.Add(methodName, new ProcessingRule(userImplementation, clientAction));
+            rules.Add(methodName, new ProcessingRule(userImplementation));
         }
 
         public IResponse GetResponseFor(Request request)
@@ -30,7 +28,7 @@ namespace TDL.Client.Queue
             try
             {
                 var result = processingRule.UserImplementation(request.Params);
-                return new ValidResponse(request.Id, result, processingRule.ClientAction);
+                return new ValidResponse(request.Id, result);
             }
             catch (Exception)
             {

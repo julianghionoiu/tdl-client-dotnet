@@ -3,6 +3,7 @@ using TDL.Client.Queue;
 using TDL.Client.Queue.Abstractions;
 using TDL.Client.Queue.Transport;
 using TDL.Client.Utils;
+using TDL.Client.Queue.Abstractions.Response;
 
 namespace TDL.Client
 {
@@ -63,14 +64,30 @@ namespace TDL.Client
             var response = processingRules.GetResponseFor(request);
             audit.Log(response);
 
-            var clientAction = response.ClientAction;
-            audit.Log(clientAction);
-
             audit.EndLine();
 
-            clientAction.AfterResponse(remoteBroker, request, response);
+            AfterResponse(remoteBroker, request, response);
 
-            return clientAction.GetNextRequest(remoteBroker);
+            return GetNextRequest(remoteBroker, response);
+        }
+
+        private void AfterResponse(RemoteBroker remoteBroker, Request request, IResponse response)
+        {
+            if (response is FatalErrorResponse) {
+               // Do nothing
+            }
+            else {
+                remoteBroker.RespondTo(request, response);
+            }
+        }
+
+        private Maybe<Request> GetNextRequest(RemoteBroker remoteBroker, IResponse response) {
+            if (response is FatalErrorResponse) {
+               return Maybe<Request>.None;
+            }
+            else {
+               return remoteBroker.Receive();
+            }
         }
     }
 }

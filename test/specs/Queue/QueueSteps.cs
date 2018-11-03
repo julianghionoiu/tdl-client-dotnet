@@ -95,8 +95,9 @@ namespace TDL.Test.Specs.Queue
             processingRuleSpecItems.ForEach(ruleSpec =>
                 queueBasedImplementationRunnerBuilder.WithSolutionFor(
                     ruleSpec.Method,
-                    CallImplementationFactory.Get(ruleSpec.Call),
-                    ClientActionsFactory.Get(ruleSpec.Action)));
+                    CallImplementationFactory.Get(ruleSpec.Call)
+                )
+            );
 
             queueBasedImplementationRunner = queueBasedImplementationRunnerBuilder.Create();
 

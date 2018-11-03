@@ -1,5 +1,3 @@
-using TDL.Client.Queue.Actions;
-
 namespace TDL.Client.Queue.Abstractions.Response
 {
     public class FatalErrorResponse : IResponse
@@ -7,8 +5,6 @@ namespace TDL.Client.Queue.Abstractions.Response
         public string Id => "error";
 
         public object Result { get; }
-
-        public IClientAction ClientAction => ClientActions.Stop;
 
         public FatalErrorResponse(string message)
         {
