@@ -34,7 +34,8 @@ namespace TDL.Client
                 using (var remoteBroker = new RemoteBroker(
                     config.Hostname,
                     config.Port,
-                    config.UniqueId,
+                    config.RequestQueueName,
+                    config.ResponseQueueName,
                     config.RequestTimeoutMilliseconds))
                 {
                     audit.LogLine("Waiting for requests");

@@ -19,7 +19,8 @@ namespace TDL.Client.Queue.Transport
         public RemoteBroker(
             string hostname,
             int port,
-            string uniqueId,
+            string requestqueuename,
+            string responsequeuename,
             long timeout)
         {
             this.timeout = timeout;
@@ -30,8 +31,8 @@ namespace TDL.Client.Queue.Transport
             connection = connectionFactory.CreateConnection();
             session = connection.CreateSession(AcknowledgementMode.ClientAcknowledge);
 
-            messageConsumer = session.CreateConsumer(session.GetQueue($"{uniqueId}.req"));
-            messageProducer = session.CreateProducer(session.GetQueue($"{uniqueId}.resp"));
+            messageConsumer = session.CreateConsumer(session.GetQueue(requestqueuename));
+            messageProducer = session.CreateProducer(session.GetQueue(responsequeuename));
 
             connection.Start();
 

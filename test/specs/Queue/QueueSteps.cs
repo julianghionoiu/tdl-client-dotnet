@@ -18,6 +18,8 @@ namespace TDL.Test.Specs.Queue
     {
         private const string Hostname = "localhost";
         private const int Port = 21616;
+        private const string RequestQueueName = "some-user-req";
+        private const string ResponseQueueName = "some-user-resp";
 
         private readonly LogAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
         private readonly RemoteJmxBroker broker = TestBroker.Instance;
@@ -33,10 +35,10 @@ namespace TDL.Test.Specs.Queue
         [Given(@"^I start with a clean broker and a client for user ""([^""]*)""$")]
         public void GivenIStartWithACleanBroker(string username)
         {
-            requestQueue = broker.AddQueue($"{username}.req");
+            requestQueue = broker.AddQueue(RequestQueueName);
             requestQueue.Purge();
 
-            responseQueue = broker.AddQueue($"{username}.resp");
+            responseQueue = broker.AddQueue(ResponseQueueName);
             responseQueue.Purge();
 
             auditStream.ClearLog();
@@ -44,7 +46,8 @@ namespace TDL.Test.Specs.Queue
             var config = new ImplementationRunnerConfig()
                 .SetHostname(Hostname)
                 .SetPort(Port)
-                .SetUniqueId(username)
+                .SetRequestQueueName(RequestQueueName)
+                .SetResponseQueueName(ResponseQueueName)
                 .SetAuditStream(auditStream);
 
             queueBasedImplementationRunnerBuilder = new QueueBasedImplementationRunner.Builder().SetConfig(config);
@@ -59,7 +62,8 @@ namespace TDL.Test.Specs.Queue
             var config = new ImplementationRunnerConfig()
                 .SetHostname("111")
                 .SetPort(Port)
-                .SetUniqueId("X")
+                .SetRequestQueueName("X")
+                .SetResponseQueueName("Y")
                 .SetAuditStream(auditStream);
 
             queueBasedImplementationRunnerBuilder = new QueueBasedImplementationRunner.Builder().SetConfig(config);
