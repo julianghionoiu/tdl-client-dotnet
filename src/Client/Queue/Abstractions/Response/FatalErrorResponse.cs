@@ -11,6 +11,6 @@ namespace TDL.Client.Queue.Abstractions.Response
             Result = message;
         }
 
-        public string AuditText => $@"{Id} = ""{Result}""";
+        public string AuditText => $@"{Id} = ""{Result}"", (NOT PUBLISHED)";
     }
 }

@@ -32,8 +32,8 @@ namespace TDL.Test.Specs.Queue
         private long requestCount;
         private long processingTimeMillis = 0;
 
-        [Given(@"^I start with a clean broker and a client for user ""([^""]*)""$")]
-        public void GivenIStartWithACleanBroker(string username)
+        [Given(@"^I start with a clean broker having a request and a response queue$")]
+        public void GivenIStartWithACleanBroker()
         {
             requestQueue = broker.AddQueue(RequestQueueName);
             requestQueue.Purge();
@@ -42,7 +42,11 @@ namespace TDL.Test.Specs.Queue
             responseQueue.Purge();
 
             auditStream.ClearLog();
+        }
 
+        [Given(@"^a client that connects to the queues$")]
+        public void AndAClientThatConnectsToTheQueues()
+        {
             var config = new ImplementationRunnerConfig()
                 .SetHostname(Hostname)
                 .SetPort(Port)
@@ -164,11 +168,25 @@ namespace TDL.Test.Specs.Queue
                 "The response queue has different size. Messages have been published.");
         }
 
+        [Then(@"the client should consume one request")]
+        public void ThenTheClientShouldConsumeOneRequest()
+        {
+            Assert.AreEqual(requestCount - 1, requestQueue.GetSize(),
+                "The request queue has different size. More than one messages have been consumed.");
+        }
+
         [Then(@"the client should consume first request")]
         public void ThenTheClientShouldConsumeFirstRequest()
         {
             Assert.AreEqual(requestCount - 1, requestQueue.GetSize(),
                 "Wrong number of requests have been consumed.");
+        }
+
+        [Then(@"the client should publish one response")]
+        public void ThenTheClientShouldPublishOneResponse()
+        {
+            Assert.AreEqual(requestCount - 2, responseQueue.GetSize(),
+                "Wrong number of responses have been received.");
         }
 
         [Then(@"the client should display to console:")]
