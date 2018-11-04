@@ -53,8 +53,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Queue\Actions\PublishAndStopAction.cs" />
-    <Compile Include="Queue\Actions\StopAction.cs" />
     <Compile Include="Audit\ConsoleAuditStream.cs" />
     <Compile Include="Audit\IAuditable.cs" />
     <Compile Include="Audit\IAuditStream.cs" />
@@ -66,11 +64,8 @@
     </Compile>
     <Compile Include="Queue\Serialization\DeserializationException.cs" />
     <Compile Include="Queue\Serialization\RequestJson.cs" />
-    <Compile Include="Queue\Actions\ClientActions.cs" />
     <Compile Include="Queue\Abstractions\Response\FatalErrorResponse.cs" />
-    <Compile Include="Queue\Actions\IClientAction.cs" />
     <Compile Include="Queue\Abstractions\ProcessingRule.cs" />
-    <Compile Include="Queue\Actions\PublishAction.cs" />
     <Compile Include="Queue\Serialization\ResponseJson.cs" />
     <Compile Include="Queue\QueueBasedImplementationRunner.Audit.cs">
       <DependentUpon>QueueBasedImplementationRunner.cs</DependentUpon>

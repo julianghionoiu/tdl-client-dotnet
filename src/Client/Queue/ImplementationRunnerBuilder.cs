@@ -6,7 +6,8 @@ namespace TDL.Client.Queue
     {
         public string Hostname { get; private set; }
         public int Port { get; private set; }
-        public string UniqueId { get; private set; }
+        public string RequestQueueName { get; private set; }
+        public string ResponseQueueName { get; private set; }
         public long RequestTimeoutMilliseconds { get; private set; }
         public IAuditStream AuditStream { get; private set; }
 
@@ -29,9 +30,15 @@ namespace TDL.Client.Queue
             return this;
         }
 
-        public ImplementationRunnerConfig SetUniqueId(string uniqueId)
+        public ImplementationRunnerConfig SetRequestQueueName(string queueName)
         {
-            UniqueId = uniqueId;
+            RequestQueueName = queueName;
+            return this;
+        }
+
+        public ImplementationRunnerConfig SetResponseQueueName(string queueName)
+        {
+            ResponseQueueName = queueName;
             return this;
         }
 

@@ -1,4 +1,3 @@
-using TDL.Client.Queue.Actions;
 using TDL.Client.Audit;
 
 namespace TDL.Client.Queue.Abstractions.Response
@@ -8,7 +7,5 @@ namespace TDL.Client.Queue.Abstractions.Response
         string Id { get; }
 
         object Result { get; }
-
-        IClientAction ClientAction { get; }
     }
 }

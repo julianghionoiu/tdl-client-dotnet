@@ -18,6 +18,8 @@ namespace TDL.Test.Specs.Queue
     {
         private const string Hostname = "localhost";
         private const int Port = 21616;
+        private const string RequestQueueName = "some-user-req";
+        private const string ResponseQueueName = "some-user-resp";
 
         private readonly LogAuditStream auditStream = new LogAuditStream(new ConsoleAuditStream());
         private readonly RemoteJmxBroker broker = TestBroker.Instance;
@@ -30,21 +32,26 @@ namespace TDL.Test.Specs.Queue
         private long requestCount;
         private long processingTimeMillis = 0;
 
-        [Given(@"^I start with a clean broker and a client for user ""([^""]*)""$")]
-        public void GivenIStartWithACleanBroker(string username)
+        [Given(@"^I start with a clean broker having a request and a response queue$")]
+        public void GivenIStartWithACleanBroker()
         {
-            requestQueue = broker.AddQueue($"{username}.req");
+            requestQueue = broker.AddQueue(RequestQueueName);
             requestQueue.Purge();
 
-            responseQueue = broker.AddQueue($"{username}.resp");
+            responseQueue = broker.AddQueue(ResponseQueueName);
             responseQueue.Purge();
 
             auditStream.ClearLog();
+        }
 
+        [Given(@"^a client that connects to the queues$")]
+        public void AndAClientThatConnectsToTheQueues()
+        {
             var config = new ImplementationRunnerConfig()
                 .SetHostname(Hostname)
                 .SetPort(Port)
-                .SetUniqueId(username)
+                .SetRequestQueueName(RequestQueueName)
+                .SetResponseQueueName(ResponseQueueName)
                 .SetAuditStream(auditStream);
 
             queueBasedImplementationRunnerBuilder = new QueueBasedImplementationRunner.Builder().SetConfig(config);
@@ -59,7 +66,8 @@ namespace TDL.Test.Specs.Queue
             var config = new ImplementationRunnerConfig()
                 .SetHostname("111")
                 .SetPort(Port)
-                .SetUniqueId("X")
+                .SetRequestQueueName("X")
+                .SetResponseQueueName("Y")
                 .SetAuditStream(auditStream);
 
             queueBasedImplementationRunnerBuilder = new QueueBasedImplementationRunner.Builder().SetConfig(config);
@@ -95,8 +103,9 @@ namespace TDL.Test.Specs.Queue
             processingRuleSpecItems.ForEach(ruleSpec =>
                 queueBasedImplementationRunnerBuilder.WithSolutionFor(
                     ruleSpec.Method,
-                    CallImplementationFactory.Get(ruleSpec.Call),
-                    ClientActionsFactory.Get(ruleSpec.Action)));
+                    CallImplementationFactory.Get(ruleSpec.Call)
+                )
+            );
 
             queueBasedImplementationRunner = queueBasedImplementationRunnerBuilder.Create();
 
@@ -159,11 +168,25 @@ namespace TDL.Test.Specs.Queue
                 "The response queue has different size. Messages have been published.");
         }
 
+        [Then(@"the client should consume one request")]
+        public void ThenTheClientShouldConsumeOneRequest()
+        {
+            Assert.AreEqual(requestCount - 1, requestQueue.GetSize(),
+                "The request queue has different size. More than one messages have been consumed.");
+        }
+
         [Then(@"the client should consume first request")]
         public void ThenTheClientShouldConsumeFirstRequest()
         {
             Assert.AreEqual(requestCount - 1, requestQueue.GetSize(),
                 "Wrong number of requests have been consumed.");
+        }
+
+        [Then(@"the client should publish one response")]
+        public void ThenTheClientShouldPublishOneResponse()
+        {
+            Assert.AreEqual(requestCount - 2, responseQueue.GetSize(),
+                "Wrong number of responses have been received.");
         }
 
         [Then(@"the client should display to console:")]

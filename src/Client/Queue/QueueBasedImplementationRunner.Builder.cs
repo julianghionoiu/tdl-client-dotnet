@@ -1,7 +1,6 @@
 ﻿using System;
 using TDL.Client.Audit;
 using TDL.Client.Queue;
-using TDL.Client.Queue.Actions;
 
 namespace TDL.Client
 {
@@ -28,16 +27,7 @@ namespace TDL.Client
                 deployProcessingRules
                     .On(methodName)
                     .Call(userImplementation)
-                    .Then(ClientActions.Publish);
-                return this;
-            }
-
-            public Builder WithSolutionFor(string methodName, Func<string[], object> userImplementation, IClientAction clientAction)
-            {
-                deployProcessingRules
-                    .On(methodName)
-                    .Call(userImplementation)
-                    .Then(clientAction);
+                    .Build();
                 return this;
             }
 
@@ -54,7 +44,7 @@ namespace TDL.Client
                 deployProcessingRules
                         .On("display_description")
                         .Call(p => "OK")
-                        .Then(ClientActions.Publish);
+                        .Build();
 
                 return deployProcessingRules;
             }
