@@ -8,6 +8,7 @@ environment:
   api_key:
     secure: 0e+hJeHViUWGnuqcVlD0kv8Rr42XlXPn3wlJ7rEUbLnq2gruFDZONrsVvvSZEcUI
   packageName: TDL.Client
+  PYTHON: C:\\Python37
 
 install:
 - cmd: git submodule update --init --recursive
@@ -24,6 +25,7 @@ before_build:
       $nuspec.package.metadata.version = "$($env:APPVEYOR_REPO_TAG_NAME.Trim("v"))"
       $nuspec.Save($nuspecPath)
     }
+- "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
 build:
   project: $(solutionName)
