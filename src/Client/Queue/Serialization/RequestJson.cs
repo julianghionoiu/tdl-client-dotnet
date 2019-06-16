@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using TDL.Client.Queue.Abstractions;
 
 namespace TDL.Client.Queue.Serialization
@@ -9,7 +11,7 @@ namespace TDL.Client.Queue.Serialization
         public string MethodName { get; set; }
 
         [JsonProperty("params")]
-        public string[] Params { get; set; }
+        public List<JToken> Params { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -26,7 +28,16 @@ namespace TDL.Client.Queue.Serialization
         {
             try
             {
-                return JsonConvert.DeserializeObject<RequestJson>(value);
+                JObject parseResult = JObject.Parse(value);
+                RequestJson request = new RequestJson();
+                request.MethodName = (string)parseResult["method"];
+                request.Params = new List<JToken>();
+                foreach (JToken param in parseResult["params"].Children())
+                {
+                    request.Params.Add(param);
+                }
+                request.Id = (string)parseResult["id"];
+                return request;
             }
             catch (JsonReaderException ex)
             {

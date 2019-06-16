@@ -1,25 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace TDL.Test.Specs.Queue.Factories
 {
     internal static class CallImplementationFactory
     {
-        private static readonly Dictionary<string, Func<string[], object>> CallImplementations =
-            new Dictionary<string, Func<string[], object>>
+        private static readonly Dictionary<string, Func<List<JToken>, object>> CallImplementations =
+            new Dictionary<string, Func<List<JToken>, object>>
             {
                 ["add two numbers"] = args =>
-                    args.Take(2).Sum(int.Parse),
+                    (int)args[0] + (int)args[1],
                 ["increment number"] = args =>
-                    int.Parse(args[0]) + 1,
+                    (int)args[0] + 1,
                 ["return null"] = args =>
                     null,
                 ["throw exception"] = args =>
                     throw new InvalidOperationException("faulty user code"),
-                ["echo the request"] = args =>
-                    args[0],
+                ["replay the value"] = args =>
+                    (string)args[0],
+                ["sum the elements of an array"] = args =>
+                {
+                    return (string) args[0];
+                },
+                ["generate array of integers"] = args =>
+                {
+                    return (string) args[0];
+                },
                 ["some logic"] = args =>
                     "ok",
                 ["work for 600ms"] = args =>
@@ -36,7 +45,7 @@ namespace TDL.Test.Specs.Queue.Factories
                 }
             };
 
-        public static Func<string[], object> Get(string call)
+        public static Func<List<JToken>, object> Get(string call)
         {
             if (!CallImplementations.ContainsKey(call))
             {

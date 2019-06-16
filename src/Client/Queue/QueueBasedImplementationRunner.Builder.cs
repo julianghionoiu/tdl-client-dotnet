@@ -1,6 +1,9 @@
 ﻿using System;
 using TDL.Client.Audit;
 using TDL.Client.Queue;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+
 
 namespace TDL.Client
 {
@@ -22,7 +25,7 @@ namespace TDL.Client
                 return this;
             }
 
-            public Builder WithSolutionFor(string methodName, Func<string[], object> userImplementation)
+            public Builder WithSolutionFor(string methodName, Func<List<JToken>, object> userImplementation)
             {
                 deployProcessingRules
                     .On(methodName)

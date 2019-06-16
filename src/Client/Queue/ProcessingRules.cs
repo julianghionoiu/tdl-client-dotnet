@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TDL.Client.Queue.Abstractions;
 using TDL.Client.Queue.Abstractions.Response;
+using Newtonsoft.Json.Linq;
 
 namespace TDL.Client.Queue
 {
@@ -13,7 +14,7 @@ namespace TDL.Client.Queue
 
         private void Add(
             string methodName,
-            Func<string[], object> userImplementation)
+            Func<List<JToken>, object> userImplementation)
         {
             rules.Add(methodName, new ProcessingRule(userImplementation));
         }

@@ -1,5 +1,7 @@
 using System.Linq;
 using Apache.NMS;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using TDL.Client.Audit;
 
 namespace TDL.Client.Queue.Abstractions
@@ -10,7 +12,7 @@ namespace TDL.Client.Queue.Abstractions
 
         public string MethodName { get; set; }
 
-        public string[] Params { get; set; }
+        public List<JToken> Params { get; set; }
 
         public string Id { get; set; }
 

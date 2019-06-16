@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace TDL.Client.Queue
 {
@@ -9,7 +11,7 @@ namespace TDL.Client.Queue
             private readonly ProcessingRules processingRules;
             private readonly string methodName;
 
-            private Func<string[], object> userImplementation;
+            private Func<List<JToken>, object> userImplementation;
 
             public Builder(string methodName, ProcessingRules processingRules)
             {
@@ -17,7 +19,7 @@ namespace TDL.Client.Queue
                 this.processingRules = processingRules;
             }
 
-            public Builder Call(Func<string[], object> userImplementation)
+            public Builder Call(Func<List<JToken>, object> userImplementation)
             {
                 this.userImplementation = userImplementation;
                 return this;
