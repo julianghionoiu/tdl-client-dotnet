@@ -23,11 +23,14 @@ namespace TDL.Test.Specs.Queue.Factories
                     (string)args[0],
                 ["sum the elements of an array"] = args =>
                 {
-                    return (string) args[0];
+                    JArray intArray = (JArray)args[0];
+                    return intArray.Select(c => (int)c).Sum();
                 },
                 ["generate array of integers"] = args =>
                 {
-                    return (string) args[0];
+                    int startIncl = (int)args[0];
+                    int endExcl = (int)args[1];
+                    return Enumerable.Range(startIncl, endExcl - startIncl).ToArray();
                 },
                 ["some logic"] = args =>
                     "ok",

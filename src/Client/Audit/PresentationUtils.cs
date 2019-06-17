@@ -1,26 +1,65 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace TDL.Client.Audit
 {
     public static class PresentationExtensions
     {
-        public static string ToDisplayableString(this object[] items) =>
-            string.Join(", ", items.Select(ToDisplayableString));
-
-        public static string ToDisplayableString(this object item)
+        public static string ToDisplayableRequest(this List<JToken> items)
         {
-            var itemString = item.ToString();
+            StringBuilder sb = new StringBuilder();
+            foreach (JToken item in items) 
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append(", ");
+                }
 
-            if (IsMultiLineString(itemString))
-                itemString = SuppressExtraLines(itemString);
+                String representation;
 
-            if (IsNotNumeric(item))
-                itemString = AddQuotes(itemString);
+                if (item.GetType().Equals(typeof(JArray)))
+                {
+                    representation = ((JArray)item).ToString(Formatting.None);
+                    representation = representation.Replace(",", ", ");  
+                }
+                else
+                {
+                    representation = ((Object)item).ToString();
 
-            return itemString;
+                    if (IsNotNumeric(item))
+                        representation = AddQuotes(representation);
+
+                    if (IsMultiLineString(representation))
+                        representation = SuppressExtraLines(representation);
+                }
+                sb.Append(representation);
+            }
+            return sb.ToString();
         }
+
+        public static string ToDisplayableResponse(this Object item)
+        {
+            if (item == null)
+                return "null";
+            
+            var representation = item.ToString();
+
+            if (item.GetType().IsArray)
+                representation = PrimitiveArrayToString(item);
+            else if (IsNotNumeric(item))
+                representation = AddQuotes(representation);
+            
+            if (IsMultiLineString(representation))
+                representation = SuppressExtraLines(representation);
+
+            return representation;
+        }
+
 
         private static bool IsMultiLineString(string value) =>
             value.Contains("\n");
@@ -32,16 +71,32 @@ namespace TDL.Client.Audit
             item != null &&
             double.TryParse(Convert.ToString(item, CultureInfo.InvariantCulture), NumberStyles.Any, NumberFormatInfo.InvariantInfo, out double _);
 
-        private static string SuppressExtraLines(string value)
+        private static string SuppressExtraLines(string representation)
         {
-            var lines = value.Split('\n');
-            var suppressedLinesCount = lines.Length - 1;
-            var plural = suppressedLinesCount > 1 ? "s" : string.Empty;
+            string[] parts = representation.Split('\n');
+            representation = parts[0];
 
-            return $"{lines[0]} .. ( {suppressedLinesCount} more line{plural} )";
+            int suppressedParts = parts.Length - 1;
+            representation += " .. ( " + suppressedParts + " more line";
+
+            if (suppressedParts > 1)
+            {
+                representation += "s";
+            }
+
+            representation += " )\"";
+            return representation;
         }
 
         private static string AddQuotes(string value) =>
-            $@"""{value}""";
+            "\""+value+"\"";
+
+        private static string PrimitiveArrayToString(object array) 
+        {
+            string json_array_as_string = JsonConvert.SerializeObject(array);
+            string representation = json_array_as_string.Replace(",", ", ");
+            return representation;
+        }
+
     }
 }

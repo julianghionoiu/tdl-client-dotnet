@@ -17,6 +17,6 @@ namespace TDL.Client.Queue.Abstractions
         public string Id { get; set; }
 
         public string AuditText =>
-            $"id = {Id}, req = {MethodName}({Params.ToArray<object>().ToDisplayableString()})";
+            $"id = {Id}, req = {MethodName}({Params.ToDisplayableRequest()})";
     }
 }
