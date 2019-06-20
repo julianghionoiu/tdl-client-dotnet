@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Collections;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -49,7 +50,7 @@ namespace TDL.Client.Audit
             
             var representation = item.ToString();
 
-            if (item.GetType().IsArray)
+            if (item.GetType().IsArray || item is IList)
                 representation = PrimitiveArrayToString(item);
             else if (IsNotNumeric(item))
                 representation = AddQuotes(representation);

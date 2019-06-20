@@ -30,7 +30,7 @@ namespace TDL.Test.Specs.Queue.Factories
                 {
                     int startIncl = (int)args[0];
                     int endExcl = (int)args[1];
-                    return Enumerable.Range(startIncl, endExcl - startIncl).ToArray();
+                    return Enumerable.Range(startIncl, endExcl - startIncl).ToList();
                 },
                 ["some logic"] = args =>
                     "ok",
