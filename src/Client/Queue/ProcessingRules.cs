@@ -31,8 +31,9 @@ namespace TDL.Client.Queue
                 var result = processingRule.UserImplementation(request.Params);
                 return new ValidResponse(request.Id, result);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 return new FatalErrorResponse("user implementation raised exception");
             }
         }
